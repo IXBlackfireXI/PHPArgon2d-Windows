@@ -7,9 +7,6 @@ It supports both versions of Argon2 while ensuring secure password hashing.
 Additionally, the extension provides a low-level Argon2d function apart from the password hash functions. 
 The Argon2 reference implementation's libargon2 is utilized for calculating the Argon2d hash.
 
-This extension was developed as part of a bachelor thesis and was partly inspired by the existing [PHP Argon2 Extension](https://github.com/charlesportwoodii/php-argon2-ext).
-You can find more about it in the corresponding [blog article](https://identeco.de/blog/protection-against-identity-theft-through-the-extension-of-php-with-argon2d/).
-
 ## Limitations
 
 **Due to the vulnerability of Argon2d to side channel attacks, it is not recommended to use this extension for password hashing in shared hosting.**
