@@ -5,7 +5,7 @@
 The PHPArgon2d extension enables the computation, verification, and update checking of Argon2d password hashes in a user-friendly manner within PHP.
 It supports both versions of Argon2 while ensuring secure password hashing.
 Additionally, the extension provides a low-level Argon2d function apart from the password hash functions. 
-The Argon2 reference implementation's libargon2 is utilized for calculating the Argon2d hash..
+The Argon2 reference implementation's libargon2 is utilized for calculating the Argon2d hash.
 
 ## Limitations
 
