@@ -8,7 +8,11 @@
 #include "ext/standard/info.h"
 #include "zend_exceptions.h"
 #include "ext/spl/spl_exceptions.h"
-#include "ext/standard/php_random.h"
+#if PHP_VERSION_ID >= 80200
+# include "ext/random/php_random.h"
+#else
+# include "ext/standard/php_random.h"
+#endif
 #include "php_argon2d.h"
 #include "argon2d_arginfo.h"
 #include "ext/argon2/include/argon2.h"
