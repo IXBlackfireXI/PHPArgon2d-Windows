@@ -15,30 +15,148 @@ The Argon2 reference implementation's libargon2 is utilized for calculating the 
 
 - At least PHP 7.4
 - 64-Bit PHP
-
+- [Git](https://git-scm.com/)
+- [Visual Studio 2022](https://visualstudio.microsoft.com/) (with the **Desktop development with C++** workload)
 
 ## Installation
 
+### Step 1: Clone the PHP SDK
+
 ```bash
-# Step 1: Download the PHPArgon2d extension
-git clone --recursive https://github.com/Identeco/PHPArgon2d.git
-cd PHPArgon2d
+git clone https://github.com/php/php-sdk-binary-tools.git C:\php-sdk
+```
 
-# Step 2: Build the static libargon2.a library from the reference implementation 
-cd ext/argon2
-CFLAGS="-fPIC" make
-rm libargon2.so.1
-cd ../..
+### Step 2: Open the PHP SDK shell
 
-# Step 3: Build the PHPArgon2d extension and test it
-phpize
-./configure --with-argon2d
-make
-make test
+```bash
+cd C:\php-sdk
+phpsdk-vs17-x64.bat
+```
 
-# Step 4: Install the extension
-make install
-echo "extension=argon2d.so" > php.ini
+### Step 3: Build the directory tree
+
+```bash
+phpsdk_buildtree phpdev
+```
+
+### Step 4: Navigate to the build directory
+
+```bash
+cd /d C:\php-sdk\phpdev\vs17\x64
+```
+
+### Step 5: Clone PHP source
+
+```bash
+git clone https://github.com/php/php-src.git php-src
+```
+
+### Step 6: Enter the PHP source directory
+
+```bash
+cd php-src
+```
+
+### Step 7: Check out the matching PHP version
+
+```bash
+git checkout <matching tag or branch>
+# Example: git checkout PHP-8.5.1
+```
+
+### Step 8: Download dependencies
+
+```bash
+phpsdk_deps --update --branch <major.minor>
+# Example: phpsdk_deps --update --branch 8.5
+```
+
+### Step 9: Create the pecl directory
+
+```bash
+cd ..
+mkdir pecl
+```
+
+### Step 10: Clone the PHPArgon2d extension
+
+```bash
+git clone https://github.com/IXBlackfireXI/PHPArgon2d-Windows.git C:\php-sdk\phpdev\vs17\x64\pecl\PHPArgon2d-Windows
+```
+
+### Step 11: Enter the extension directory
+
+```bash
+cd pecl\PHPArgon2d-Windows
+```
+
+### Step 12: Initialize submodules
+
+```bash
+git submodule update --init --recursive
+```
+
+### Step 13: Clone the Argon2 reference implementation
+
+```bash
+git clone https://github.com/P-H-C/phc-winner-argon2.git C:\php-sdk\phpdev\vs17\x64\pecl\phc-winner-argon2
+```
+
+### Step 14: Build the Argon2 static library
+
+Open the **Developer Command Prompt for VS 2022**, then run:
+
+```bash
+cd C:\php-sdk\phpdev\vs17\x64\pecl\phc-winner-argon2
+cl /c src\argon2.c src\core.c src\encoding.c src\opt.c src\thread.c /Iinclude
+lib argon2.obj core.obj encoding.obj opt.obj thread.obj /OUT:argon2.lib
+```
+
+### Step 15: Copy the library to the deps folder
+
+```bash
+copy C:\php-sdk\phpdev\vs17\x64\pecl\phc-winner-argon2\argon2.lib C:\php-sdk\phpdev\vs17\x64\deps\lib\
+```
+
+### Step 16: Return to the PHP source directory
+
+```bash
+cd C:\php-sdk\phpdev\vs17\x64\php-src
+```
+
+### Step 17: Run buildconf
+
+```bash
+buildconf
+```
+
+### Step 18: Verify the extension is available
+
+```bash
+configure --help
+# --with-argon2d "for argon2d support" should appear in the list
+```
+
+### Step 19: Configure the build
+
+```bash
+# Thread-safe build (TS)
+configure --disable-all --enable-cli --with-argon2d=shared
+
+# Non-thread-safe build (NTS)
+configure --disable-all --disable-zts --enable-cli --with-argon2d=shared
+```
+
+### Step 20: Compile
+
+```bash
+nmake
+```
+
+### Step 21: Copy the extension DLL to your PHP installation
+
+```bash
+copy C:\php-sdk\phpdev\vs17\x64\php-src\x64\Release_TS\php_argon2d.dll <PHP DESTINATION FOLDER>
 ```
 
 ## Usage
